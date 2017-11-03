@@ -1,5 +1,5 @@
 var map;
-
+var singleInfoWindow;
 // Create a new blank array for all the listing markers.
 var markers = [];
 
@@ -11,7 +11,7 @@ function initMap() {
 	  mapTypeControl: false
 	});
 
-	var largeInfowindow = new google.maps.InfoWindow();
+	singleInfoWindow = new google.maps.InfoWindow();
 
 	// display listings on page load
 	createMapMarkers(locations);
@@ -36,8 +36,7 @@ function createMapMarkers(locations) {
 	  markers.push(marker);
 	  // Create an onclick event to open an infowindow at each marker.
 	  marker.addListener('click', function() {
-	  	var infowindow = new google.maps.InfoWindow();
-	    populateInfoWindow(this, infowindow);
+	    populateInfoWindow(this, singleInfoWindow);
 	  });
 	}
 }
