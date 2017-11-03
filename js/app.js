@@ -28,6 +28,24 @@ var viewModel = function() {
 		self.locationList.push( new Location(locationItem) );
 	});
 
+	// highlight locaction when list location is clicked
+	this.highlightLocation = function(clickedLocation) {
+		// determine which location was clicked
+		self.locationList().forEach(function (locationItem, i) {
+			//markers[i].close();
+			if (locationItem.title() == clickedLocation.title()) {
+				// center the map
+				var position = markers[i].getPosition();
+				map.panTo(position);
+
+				// animate the marker
+				// show popup info window
+				populateInfoWindow(markers[i], singleInfoWindow);
+			}
+		});
+	}
+
+
 }
 
 ko.applyBindings(new viewModel());
