@@ -20,7 +20,7 @@ function initMap() {
 
 
 function createMapMarkers(locations) {
-		// The following group uses the location array to create an array of markers on initialize.
+	// The following group uses the location array to create an array of markers on initialize.
 	for (var i = 0; i < locations.length; i++) {
 	  // Get the position from the location array.
 	  var position = locations[i].location;
@@ -36,6 +36,10 @@ function createMapMarkers(locations) {
 	  markers.push(marker);
 	  // Create an onclick event to open an infowindow at each marker.
 	  marker.addListener('click', function() {
+		// center the map
+		var position = this.getPosition();
+		map.panTo(position);
+		// show popup window
 	    populateInfoWindow(this, singleInfoWindow);
 	  });
 	}
