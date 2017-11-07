@@ -22,6 +22,7 @@ var viewModel = function() {
 
 	this.locationList = ko.observableArray([]);
 	this.infoWindow = ko.observable();
+	this.searchQuery = ko.observable();
 
 	// add each location to the locationList
 	locations.forEach(function(locationItem) {
@@ -45,6 +46,24 @@ var viewModel = function() {
 		});
 	}
 
+	// filter locations by search input
+	this.filterLocations = ko.computed(function() {
+		var filter = self.searchQuery();
+		console.log(filter);
+	    if (!filter) {
+	        return self.locationList();
+	    } else {
+
+	        return ko.utils.arrayFilter(self.locationList(), function(item) {
+
+	            if ( item.title().toLowerCase().includes(filter.toLowerCase()) ) {
+	            	console.log('yes match: ' + item.title());
+	            	return true;
+	            }
+
+	        });
+	    }
+	});
 
 }
 
