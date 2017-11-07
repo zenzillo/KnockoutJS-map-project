@@ -16,15 +16,15 @@
     <div class="container">
       <div class="sidebar">
         <h1>Theme Parks in Central Florida</h1>
-        <input id="search-listings" type="text" value="Search listings">
-		<ul data-bind="foreach: locationList">
+        <input data-bind="textInput: searchQuery" type="text">
+		<ul data-bind="foreach: filterLocations">
 			<li data-bind="text: title, click: $parent.highlightLocation"></li>
 		</ul>
       </div>
       <div id="map"></div>
     </div>
 
-    <script src="js/lib/knockout-3.2.0.js"></script>
+    <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/map.js"></script>
     <script src="js/app.js"></script>
     <script async defer
