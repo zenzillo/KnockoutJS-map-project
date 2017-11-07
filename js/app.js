@@ -1,10 +1,16 @@
 
 var locations = [
-  {title: 'Magic Kingdom Park', location: {lat: 28.417663, lng: -81.581212}},
-  {title: 'Epcot', location: {lat: 28.374694, lng: -81.549404}},
+  {title: 'Animal Kingdom', location: {lat: 28.359719, lng: -81.591313}},
   {title: 'Disney Springs', location: {lat: 28.370256, lng: -81.520992}},
+  {title: 'Epcot', location: {lat: 28.374694, lng: -81.549404}},
+  {title: 'Gatorland', location: {lat: 28.355867, lng: -81.404632}},
   {title: 'Hollywood Studios', location: {lat: 28.357529, lng: -81.558271}},
-  {title: 'Animal Kingdom', location: {lat: 28.359719, lng: -81.591313}}
+  {title: 'Magic Kingdom Park', location: {lat: 28.417663, lng: -81.581212}},
+  {title: 'SeaWorld', location: {lat: 28.418994, lng: -81.461623}},
+  {title: 'The Holy Land Experience', location: {lat: 28.495359, lng: -81.433127}},
+  {title: 'The Wizarding World of Harry Potter', location: {lat: 28.481529, lng: -81.469861}},
+  {title: 'Universal Studios Florida', location: {lat: 28.475727, lng: -81.469478}},
+  {title: 'Universal\'s Islands of Adventure', location: {lat: 28.471049, lng: -81.471848}},
 ];
 
 
@@ -49,19 +55,29 @@ var viewModel = function() {
 	// filter locations by search input
 	this.filterLocations = ko.computed(function() {
 		var filter = self.searchQuery();
-		console.log(filter);
+
 		// if no filter, display all locations
 	    if (!filter) {
+	    	// turn on all markers
+	    	for (var i = 0; i < markers.length; i++) {
+			  markers[i].setMap(map);
+			}
+			// display all locations
 	        return self.locationList();
 	    } else {
+
 	    	// filter list by input search
-	        return ko.utils.arrayFilter(self.locationList(), function(item) {
+	        return ko.utils.arrayFilter(self.locationList(), function(item, i) {
 
 	            if ( item.title().toLowerCase().includes(filter.toLowerCase()) ) {
-	            	console.log('yes match: ' + item.title());
+	            	// display marker for matching location title
+	            	markers[i].setMap(map);
 	            	return true;
 	            }
-
+	            else {
+	            	// hide marker from map
+	            	markers[i].setMap(null);
+	            }
 	        });
 	    }
 	});
