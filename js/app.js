@@ -29,7 +29,7 @@ var viewModel = function() {
 		self.locationList.push( new Location(locationItem) );
 	});
 
-	// highlight locaction when list location is clicked
+	// highlight location when list item is clicked
 	this.highlightLocation = function(clickedLocation) {
 		// determine which location was clicked
 		self.locationList().forEach(function (locationItem, i) {
@@ -39,7 +39,7 @@ var viewModel = function() {
 				var position = markers[i].getPosition();
 				map.panTo(position);
 
-				// animate the marker
+				// TODO - animate the marker
 				// show popup info window
 				populateInfoWindow(markers[i], singleInfoWindow);
 			}
@@ -50,10 +50,11 @@ var viewModel = function() {
 	this.filterLocations = ko.computed(function() {
 		var filter = self.searchQuery();
 		console.log(filter);
+		// if no filter, display all locations
 	    if (!filter) {
 	        return self.locationList();
 	    } else {
-
+	    	// filter list by input search
 	        return ko.utils.arrayFilter(self.locationList(), function(item) {
 
 	            if ( item.title().toLowerCase().includes(filter.toLowerCase()) ) {
