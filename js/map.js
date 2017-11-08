@@ -24,11 +24,13 @@ function createMapMarkers(locations) {
 	for (var i = 0; i < locations.length; i++) {
 	  // Get the position from the location array.
 	  var position = locations[i].location;
-	  var title = locations[i].title;
+	  //var title = locations[i].title;
 	  // Create a marker per location, and put into markers array.
 	   var marker = new google.maps.Marker({
 	    position: position,
-	    title: title,
+	    latitude: locations[i].location.lat,
+	    longitude: locations[i].location.lng,
+	    title: locations[i].title,
 	    animation: google.maps.Animation.DROP,
 	    id: i
 	  });
@@ -50,15 +52,55 @@ function createMapMarkers(locations) {
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
+
 	// Check to make sure the infowindow is not already opened on this marker.
 	if (infowindow.marker != marker) {
-	  infowindow.marker = marker;
-	  infowindow.setContent('<div>' + marker.title + '</div>');
-	  infowindow.open(map, marker);
-	  // Make sure the marker property is cleared if the infowindow is closed.
-	  infowindow.addListener('closeclick', function() {
-	    infowindow.marker = null;
-	  });
+	    infowindow.marker = marker;
+
+		// Query Foursquare API for location details
+		$.ajax({
+		    url:'https://api.foursquare.com/v2/venues/search',
+		    data: {
+		    	client_id: "PJL50SVLNLN5UUXVEFUE1DGWEZIORWO0OZTVZAONZRSRWEJI",
+		    	client_secret: "YDP12OIE42GZU4H2GRALF404HTYC04T3UYZV4LCES2JODEML",
+		    	v: "20130815",
+		    	ll: marker.latitude + "," + marker.longitude,
+		    	query: marker.title
+		    },
+		    success:function(locationData) {
+		    	// add location details to info window
+		        console.dir(locationData.response.venues[0]);
+		        var venue = locationData.response.venues[0];
+		        var details = '<b>' + venue.name + '</b>';
+		        details += '<p>' + venue.location.formattedAddress[0] + '<br>';
+		        details += venue.location.formattedAddress[1] + '<br>';
+		        details += venue.location.formattedAddress[2] + '</p>';
+		        details += '<a href="' + venue.url + '" target="_blank">' + venue.url + '</a>';
+		        if (venue.rating) {
+		        	details += '<b> Rating: </b>' + venue.rating;
+		        }
+		        if (venue.popular) {
+		        	details += '<b> Popular: </b>' + venue.popular;
+		        }
+		        console.log(details);
+		        infowindow.setContent('<div>' + details + '</div>');
+	    		infowindow.open(map, marker);
+		        //$('article').text('Hello '+locationData.response.user.firstName);
+		    },
+		    error: function(jqXHR, textStatus, errorThrown){
+		    	// show pleasant error
+		        console.error(errorThrown);
+		        var details = '<b>' + marker.title + '</b>';
+		        details += '<p>Sorry there was an error loading additional information.</p>';
+		        infowindow.setContent('<div>' + details + '</div>');
+	    		infowindow.open(map, marker);
+		    }
+		});
+
+	    // Make sure the marker property is cleared if the infowindow is closed.
+	    infowindow.addListener('closeclick', function() {
+	    	infowindow.marker = null;
+	    });
 	}
 
 }
