@@ -26,14 +26,6 @@ function createMapMarkers(locations) {
 	for (var i = 0; i < locations.length; i++) {
 	  // Get the position from the location array.
 	  var position = locations[i].location;
-	  //var title = locations[i].title;
-
-	  // Get Foursquare Id
-	  /*
-	  var venueId = getVenueFoursquareId(locations[i]);
-	  console.dir(venueId);
-	  console.log('Foursquare venue id: ' + venueId);
-		*/
 
 	  // Create a marker per location, and put into markers array.
 	  var marker = new google.maps.Marker({
@@ -60,8 +52,6 @@ function createMapMarkers(locations) {
 
 
 function getVenueFoursquareId(markers) {
-	console.log('-- getVenueFoursquareId');
-	//console.dir(location);
 
 	markers.forEach( function(marker) {
 
@@ -77,7 +67,6 @@ function getVenueFoursquareId(markers) {
 		    },
 		    success:function(locationData) {
 		    	// add location details to info window
-		        console.dir(locationData.response.venues[0]);
 		        var venue = locationData.response.venues[0];
 		        marker.venueId = venue.id;
 		        return true;
@@ -85,13 +74,12 @@ function getVenueFoursquareId(markers) {
 		    error: function(jqXHR, textStatus, errorThrown){
 		    	// show pleasant error
 		        console.error(errorThrown);
+		        // TODO - output error?
 		    }
 		});
 
 	});
 
-	console.dir(markers);
-	console.log('end getVenueFoursquareId --');
 }
 
 
@@ -106,13 +94,10 @@ function populateInfoWindow(marker, infowindow) {
 	if (infowindow.marker != marker) {
 
 	    infowindow.marker = marker;
-	    //infowindow.setContent('');
-	    console.log(marker.venueId);
 	    infoWindowContent = ''; // reset window content variable
 	    getVenueDetails(marker, infowindow);
 		getVenuePhoto(marker, infowindow);
 
-		//infowindow.setContent('<div>' + infoWindowContent + '</div>');
 	    infowindow.open(map, marker);
 
 	    // Make sure the marker property is cleared if the infowindow is closed.
@@ -148,8 +133,6 @@ function getVenueDetails(marker, infowindow) {
 
 	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
 	        return locationData;
-    		//infowindow.open(map, marker);
-	        //$('article').text('Hello '+locationData.response.user.firstName);
 	    },
 	    error: function(jqXHR, textStatus, errorThrown){
 	    	// show pleasant error
@@ -157,7 +140,6 @@ function getVenueDetails(marker, infowindow) {
 	        infoWindowContent += '<b>' + marker.title + '</b>';
 	        infoWindowContent += '<p>Sorry there was an error loading additional information.</p>';
 	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
-    		//infowindow.open(map, marker);
     		return infoWindowContent;
 	    }
 	});
@@ -173,15 +155,11 @@ function getVenuePhoto(marker, infowindow) {
 	    	v: "20130815",
 	    },
 	    success:function(photoDetails) {
-
-	    	console.dir(photoDetails);
+	    	// get photo and add to infowindow
 	    	if (photoDetails.response.photos) {
-	    		console.log('yes there are photos')
 	    		var photo = photoDetails.response.photos.items[0];
 	    		var photo_src = photo.prefix + 'width300' + photo.suffix;
 	    		infoWindowContent += '<br><br><img src="' + photo_src + '"><br><br>';
-
-	    		//var previousContent = infowindow.getContent();
 	    		infowindow.setContent('<div>' + infoWindowContent + '</div>');
 	    		return photoDetails;
 	    	}
@@ -189,6 +167,10 @@ function getVenuePhoto(marker, infowindow) {
 		},
 		error: function(jqXHR, textStatus, errorThrown){
 			console.error(errorThrown);
+	        infoWindowContent += '<b>' + marker.title + '</b>';
+	        infoWindowContent += '<p>No image could be found at this time.</p>';
+	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
+    		return infoWindowContent;
 		}
 	});
 }
