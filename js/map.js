@@ -2,6 +2,7 @@ var map;
 var singleInfoWindow;
 // Create a new blank array for all the listing markers.
 var markers = [];
+var infoWindowContent;
 
 function initMap() {
 	// Constructor creates a new map - only center and zoom are required.
@@ -15,6 +16,7 @@ function initMap() {
 
 	// display listings on page load
 	createMapMarkers(locations);
+	getVenueFoursquareId(markers);
 	showListings();
 }
 
@@ -25,14 +27,23 @@ function createMapMarkers(locations) {
 	  // Get the position from the location array.
 	  var position = locations[i].location;
 	  //var title = locations[i].title;
+
+	  // Get Foursquare Id
+	  /*
+	  var venueId = getVenueFoursquareId(locations[i]);
+	  console.dir(venueId);
+	  console.log('Foursquare venue id: ' + venueId);
+		*/
+
 	  // Create a marker per location, and put into markers array.
-	   var marker = new google.maps.Marker({
+	  var marker = new google.maps.Marker({
 	    position: position,
 	    latitude: locations[i].location.lat,
 	    longitude: locations[i].location.lng,
 	    title: locations[i].title,
 	    animation: google.maps.Animation.DROP,
-	    id: i
+	    venueId: 'placeholder',
+	    id: i,
 	  });
 	  // Push the marker to our array of markers.
 	  markers.push(marker);
@@ -48,22 +59,19 @@ function createMapMarkers(locations) {
 }
 
 
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
-function populateInfoWindow(marker, infowindow) {
+function getVenueFoursquareId(markers) {
+	console.log('-- getVenueFoursquareId');
+	//console.dir(location);
 
-	// Check to make sure the infowindow is not already opened on this marker.
-	if (infowindow.marker != marker) {
-	    infowindow.marker = marker;
+	markers.forEach( function(marker) {
 
 		// Query Foursquare API for location details
 		$.ajax({
 		    url:'https://api.foursquare.com/v2/venues/search',
 		    data: {
-		    	client_id: "PJL50SVLNLN5UUXVEFUE1DGWEZIORWO0OZTVZAONZRSRWEJI",
-		    	client_secret: "YDP12OIE42GZU4H2GRALF404HTYC04T3UYZV4LCES2JODEML",
-		    	v: "20130815",
+		    	client_id: foursquare_client_id,
+		    	client_secret: foursquare_client_secret,
+		    	v: '20130815',
 		    	ll: marker.latitude + "," + marker.longitude,
 		    	query: marker.title
 		    },
@@ -71,31 +79,41 @@ function populateInfoWindow(marker, infowindow) {
 		    	// add location details to info window
 		        console.dir(locationData.response.venues[0]);
 		        var venue = locationData.response.venues[0];
-		        var details = '<b>' + venue.name + '</b>';
-		        details += '<p>' + venue.location.formattedAddress[0] + '<br>';
-		        details += venue.location.formattedAddress[1] + '<br>';
-		        details += venue.location.formattedAddress[2] + '</p>';
-		        details += '<a href="' + venue.url + '" target="_blank">' + venue.url + '</a>';
-		        if (venue.rating) {
-		        	details += '<b> Rating: </b>' + venue.rating;
-		        }
-		        if (venue.popular) {
-		        	details += '<b> Popular: </b>' + venue.popular;
-		        }
-		        console.log(details);
-		        infowindow.setContent('<div>' + details + '</div>');
-	    		infowindow.open(map, marker);
-		        //$('article').text('Hello '+locationData.response.user.firstName);
+		        marker.venueId = venue.id;
+		        return true;
 		    },
 		    error: function(jqXHR, textStatus, errorThrown){
 		    	// show pleasant error
 		        console.error(errorThrown);
-		        var details = '<b>' + marker.title + '</b>';
-		        details += '<p>Sorry there was an error loading additional information.</p>';
-		        infowindow.setContent('<div>' + details + '</div>');
-	    		infowindow.open(map, marker);
 		    }
 		});
+
+	});
+
+	console.dir(markers);
+	console.log('end getVenueFoursquareId --');
+}
+
+
+
+
+// This function populates the infowindow when the marker is clicked. We'll only allow
+// one infowindow which will open at the marker that is clicked, and populate based
+// on that markers position.
+function populateInfoWindow(marker, infowindow) {
+
+	// Check to make sure the infowindow is not already opened on this marker.
+	if (infowindow.marker != marker) {
+
+	    infowindow.marker = marker;
+	    //infowindow.setContent('');
+	    console.log(marker.venueId);
+	    infoWindowContent = ''; // reset window content variable
+	    getVenueDetails(marker, infowindow);
+		getVenuePhoto(marker, infowindow);
+
+		//infowindow.setContent('<div>' + infoWindowContent + '</div>');
+	    infowindow.open(map, marker);
 
 	    // Make sure the marker property is cleared if the infowindow is closed.
 	    infowindow.addListener('closeclick', function() {
@@ -103,6 +121,76 @@ function populateInfoWindow(marker, infowindow) {
 	    });
 	}
 
+}
+
+
+function getVenueDetails(marker, infowindow) {
+
+	// Query Foursquare API for location details
+	$.ajax({
+	    url:'https://api.foursquare.com/v2/venues/search',
+	    data: {
+	    	client_id: foursquare_client_id,
+	    	client_secret: foursquare_client_secret,
+	    	v: "20130815",
+	    	ll: marker.latitude + "," + marker.longitude,
+	    	query: marker.title
+	    },
+	    success:function(locationData) {
+	    	// add location details to info window
+	        console.dir(locationData.response.venues[0]);
+	        var venue = locationData.response.venues[0];
+	        infoWindowContent += '<b>' + venue.name + '</b>';
+	        infoWindowContent += '<p>' + venue.location.formattedAddress[0] + '<br>';
+	        infoWindowContent += venue.location.formattedAddress[1] + '<br>';
+	        infoWindowContent += venue.location.formattedAddress[2] + '</p>';
+	        infoWindowContent += '<a href="' + venue.url + '" target="_blank">' + venue.url + '</a>';
+
+	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
+	        return locationData;
+    		//infowindow.open(map, marker);
+	        //$('article').text('Hello '+locationData.response.user.firstName);
+	    },
+	    error: function(jqXHR, textStatus, errorThrown){
+	    	// show pleasant error
+	        console.error(errorThrown);
+	        infoWindowContent += '<b>' + marker.title + '</b>';
+	        infoWindowContent += '<p>Sorry there was an error loading additional information.</p>';
+	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
+    		//infowindow.open(map, marker);
+    		return infoWindowContent;
+	    }
+	});
+}
+
+function getVenuePhoto(marker, infowindow) {
+    // grab a photo from Foursquare
+	$.ajax({
+	    url:'https://api.foursquare.com/v2/venues/'+ marker.venueId +'/photos',
+	    data: {
+	    	client_id: foursquare_client_id,
+	    	client_secret: foursquare_client_secret,
+	    	v: "20130815",
+	    },
+	    success:function(photoDetails) {
+
+	    	console.dir(photoDetails);
+	    	if (photoDetails.response.photos) {
+	    		console.log('yes there are photos')
+	    		var photo = photoDetails.response.photos.items[0];
+	    		var photo_src = photo.prefix + 'width300' + photo.suffix;
+	    		infoWindowContent += '<br><br><img src="' + photo_src + '"><br><br>';
+
+	    		//var previousContent = infowindow.getContent();
+	    		infowindow.setContent('<div>' + infoWindowContent + '</div>');
+	    		return photoDetails;
+	    	}
+
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.error(errorThrown);
+		}
+	});
 }
 
 // This function will loop through the markers array and display them all.

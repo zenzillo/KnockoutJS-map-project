@@ -21,6 +21,10 @@ var Location = function(data) {
 	this.longitude = ko.observable(data.location.lon);
 }
 
+// Foursquare API keys
+var foursquare_client_id = "PJL50SVLNLN5UUXVEFUE1DGWEZIORWO0OZTVZAONZRSRWEJI";
+var foursquare_client_secret = "YDP12OIE42GZU4H2GRALF404HTYC04T3UYZV4LCES2JODEML";
+
 
 var viewModel = function() {
 
