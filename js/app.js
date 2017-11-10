@@ -49,7 +49,9 @@ var viewModel = function() {
 				var position = markers[i].getPosition();
 				map.panTo(position);
 
-				// TODO - animate the marker
+				// animate the marker
+				toggleBounce(markers[i]);
+
 				// show popup info window
 				populateInfoWindow(markers[i], singleInfoWindow);
 			}
