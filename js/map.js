@@ -41,6 +41,7 @@ function createMapMarkers(locations) {
 	  markers.push(marker);
 	  // Create an onclick event to open an infowindow at each marker.
 	  marker.addListener('click', function() {
+	  	toggleBounce(this);
 		// center the map
 		var position = this.getPosition();
 		map.panTo(position);
@@ -184,4 +185,18 @@ function showListings() {
 	  bounds.extend(markers[i].position);
 	}
 	map.fitBounds(bounds);
+}
+
+// toggle marker animation
+function toggleBounce(marker) {
+	if (marker.getAnimation() !== null) {
+		marker.setAnimation(null);
+	} else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+
+		window.setTimeout(function() {
+          marker.setAnimation(null)
+        }, 1000);
+
+	}
 }
