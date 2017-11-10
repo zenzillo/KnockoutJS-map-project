@@ -192,8 +192,9 @@ function toggleBounce(marker) {
 	if (marker.getAnimation() !== null) {
 		marker.setAnimation(null);
 	} else {
+		// set bounce
 		marker.setAnimation(google.maps.Animation.BOUNCE);
-
+		// turn off bounce after 1 second
 		window.setTimeout(function() {
           marker.setAnimation(null)
         }, 1000);
