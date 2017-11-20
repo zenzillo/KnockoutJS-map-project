@@ -26,8 +26,8 @@
 	  </div>
 
       <div class="sidebar">
-		<ul data-bind="foreach: filterLocations">
-			<li data-bind="text: title, click: $parent.highlightLocation"></li>
+		<ul class="list-group" data-bind="foreach: filterLocations">
+			<li class="list-group-item" data-bind="text: title, click: $parent.highlightLocation"></li>
 		</ul>
 		<img class="api-logo" src="img/Powered-by-Foursquare-one-color-300_preview.png">
       </div>

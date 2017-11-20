@@ -41,6 +41,7 @@ var viewModel = function() {
 
 	// highlight location when list item is clicked
 	this.highlightLocation = function(clickedLocation) {
+
 		// determine which location was clicked
 		self.locationList().forEach(function (locationItem, i) {
 			//markers[i].close();
