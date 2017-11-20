@@ -10,22 +10,35 @@
 
     <title>Neighborhood Map Project</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="css/style.css" rel="stylesheet">
   </head>
 
   <body>
+
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Theme Parks near Orlando, FL, USA</a>
+	    </div>
+	  </div>
+	</nav>
+
+
     <div class="container">
-	  <div class="top">
-	  	<h1>Theme Parks near Orlando, FL, USA</h1>
+      <div class="sidebar">
 	  	<form>
 		  	<div class="input-group">
 	  			<input class="form-control" data-bind="textInput: searchQuery" type="text">
 	  			<span class="input-group-addon">Filter</span>
 		  	</div>
 		</form>
-	  </div>
-
-      <div class="sidebar">
 		<ul class="list-group" data-bind="foreach: filterLocations">
 			<li class="list-group-item" data-bind="text: title, click: $parent.highlightLocation"></li>
 		</ul>
