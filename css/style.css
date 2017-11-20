@@ -45,3 +45,9 @@
         text-align: left;
         width: 340px;
       }
+
+      .api-logo {
+      	position: absolute;
+      	bottom: 20px;
+      	width: 150px;
+      }
