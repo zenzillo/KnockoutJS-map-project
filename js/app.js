@@ -35,7 +35,7 @@ var viewModel = function() {
 	this.locationList = ko.observableArray([]);
 	this.infoWindow = ko.observable();
 	this.searchQuery = ko.observable();
-	this.showSidebar = ko.observable(true);
+	this.showSidebar = ko.observable(false);
 
 	// add each location to the locationList
 	locations.forEach(function(locationItem) {
