@@ -74,8 +74,7 @@ function getVenueFoursquareId(markers) {
 		    },
 		    error: function(jqXHR, textStatus, errorThrown){
 		    	// show pleasant error
-		        console.error(errorThrown);
-		        // TODO - output error?
+		        // console.error(errorThrown);
 		    }
 		});
 
@@ -124,7 +123,6 @@ function getVenueDetails(marker, infowindow) {
 	    },
 	    success:function(locationData) {
 	    	// add location details to info window
-	        console.dir(locationData.response.venues[0]);
 	        var venue = locationData.response.venues[0];
 	        infoWindowContent += '<b>' + venue.name + '</b>';
 	        infoWindowContent += '<p>' + venue.location.formattedAddress[0] + '<br>';
@@ -137,7 +135,6 @@ function getVenueDetails(marker, infowindow) {
 	    },
 	    error: function(jqXHR, textStatus, errorThrown){
 	    	// show pleasant error
-	        console.error(errorThrown);
 	        infoWindowContent += '<b>' + marker.title + '</b>';
 	        infoWindowContent += '<p>Sorry there was an error loading additional information.</p>';
 	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
@@ -167,7 +164,6 @@ function getVenuePhoto(marker, infowindow) {
 
 		},
 		error: function(jqXHR, textStatus, errorThrown){
-			console.error(errorThrown);
 	        infoWindowContent += '<b>' + marker.title + '</b>';
 	        infoWindowContent += '<p>No image could be found at this time.</p>';
 	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
