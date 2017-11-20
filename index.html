@@ -9,14 +9,23 @@
     <meta name="author" content="">
 
     <title>Neighborhood Map Project</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/style.css" rel="stylesheet">
   </head>
 
   <body>
     <div class="container">
+	  <div class="top">
+	  	<h1>Theme Parks near Orlando, FL, USA</h1>
+	  	<form>
+		  	<div class="input-group">
+	  			<input class="form-control" data-bind="textInput: searchQuery" type="text">
+	  			<span class="input-group-addon">Filter</span>
+		  	</div>
+		</form>
+	  </div>
+
       <div class="sidebar">
-        <h1>Theme Parks near Orlando, FL, USA</h1>
-        <input data-bind="textInput: searchQuery" type="text">
 		<ul data-bind="foreach: filterLocations">
 			<li data-bind="text: title, click: $parent.highlightLocation"></li>
 		</ul>
