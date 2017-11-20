@@ -35,7 +35,7 @@ var viewModel = function() {
 	this.locationList = ko.observableArray([]);
 	this.infoWindow = ko.observable();
 	this.searchQuery = ko.observable();
-	this.shouldShowSidebar = ko.observable(true);
+	this.showSidebar = ko.observable(true);
 
 	// add each location to the locationList
 	locations.forEach(function(locationItem) {
@@ -95,11 +95,11 @@ var viewModel = function() {
 
 	// toggle sidebar view when hamburger menu icon is clicked
 	this.toggleSidebar = function () {
-		if (this.shouldShowSidebar()) {
-			this.shouldShowSidebar(false);
+		if (this.showSidebar()) {
+			this.showSidebar(false);
 		}
 		else {
-			this.shouldShowSidebar(true);
+			this.showSidebar(true);
 		}
 	}
 
