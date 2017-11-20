@@ -46,6 +46,7 @@
       	.sidebar {
       		top: 52px;
       		padding-top: 15px;
+      		z-index: 100;
       	}
       }
 
