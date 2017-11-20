@@ -26,6 +26,7 @@
         position: absolute;
         right: 0px;
         top: 52px;
+        z-index: -1;
       }
 
       .sidebar {
@@ -37,6 +38,22 @@
         width: 340px;
         position: fixed;
         left: 0;
+      }
+
+      @media screen and (max-width: 480px) {
+      	#map {
+      		left: 0px;
+      		z-index: -1;
+      	}
+      	/*
+      	.sidebar {
+      		visibility:hidden;
+      	}
+      	*/
+      	.sidebar {
+      		top: 52px;
+      		padding-top: 15px;
+      	}
       }
 
       .api-logo {
