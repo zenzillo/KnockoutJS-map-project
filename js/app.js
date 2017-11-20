@@ -47,7 +47,7 @@ var viewModel = function() {
 
 		// determine which location was clicked
 		self.locationList().forEach(function (locationItem, i) {
-			//markers[i].close();
+
 			if (locationItem.title() == clickedLocation.title()) {
 				// center the map
 				var position = markers[i].getPosition();
@@ -60,16 +60,6 @@ var viewModel = function() {
 				populateInfoWindow(markers[i], singleInfoWindow);
 			}
 		});
-	}
-
-	// toggle sidebar view when screen is minimized
-	this.toggleSidebar = function () {
-		if (this.shouldShowSidebar()) {
-			this.shouldShowSidebar(false);
-		}
-		else {
-			this.shouldShowSidebar(true);
-		}
 	}
 
 	// filter locations by search input
@@ -101,6 +91,17 @@ var viewModel = function() {
 	        });
 	    }
 	});
+
+
+	// toggle sidebar view when hamburger menu icon is clicked
+	this.toggleSidebar = function () {
+		if (this.shouldShowSidebar()) {
+			this.shouldShowSidebar(false);
+		}
+		else {
+			this.shouldShowSidebar(true);
+		}
+	}
 
 }
 
