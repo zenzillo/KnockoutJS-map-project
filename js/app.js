@@ -1,4 +1,3 @@
-
 var locations = [
   {title: 'Animal Kingdom', location: {lat: 28.359719, lng: -81.591313}},
   {title: 'Crayola Experience', location: {lat: 28.444446, lng: -81.392147}},
