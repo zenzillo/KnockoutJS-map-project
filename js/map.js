@@ -224,3 +224,10 @@ function toggleBounce(marker) {
 
 	}
 }
+
+/**
+* @description - Display error if there is a problem accesssing Google Maps API
+*/
+function googleError() {
+	$('#map').html('<br>Sorry there was a problem loading the map. Please try again later.');
+}
