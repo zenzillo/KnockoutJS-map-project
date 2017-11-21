@@ -69,28 +69,26 @@ function getVenueFoursquareId(markers) {
 
 	markers.forEach( function(marker) {
 
-		// Query Foursquare API for location details
-		$.ajax({
-		    url:'https://api.foursquare.com/v2/venues/search',
-		    data: {
-		    	client_id: foursquare_client_id,
-		    	client_secret: foursquare_client_secret,
-		    	v: '20130815',
-		    	ll: marker.latitude + "," + marker.longitude,
-		    	query: marker.title
-		    },
-		    success:function(locationData) {
-		    	// add location details to info window
-		        var venue = locationData.response.venues[0];
-		        marker.venueId = venue.id;
-		        return true;
-		    },
-		    error: function(jqXHR, textStatus, errorThrown){
-		    	// show pleasant error
-		        // console.error(errorThrown);
-		    }
-		});
-
+	// Query Foursquare API for location details
+	$.ajax({
+	    url:'https://api.foursquare.com/v2/venues/search',
+	    data: {
+	    	client_id: foursquare_client_id,
+	    	client_secret: foursquare_client_secret,
+	    	v: '20130815',
+	    	ll: marker.latitude + "," + marker.longitude,
+	    	query: marker.title
+		}
+	})
+    .done( function(locationData) {
+    	// add location details to info window
+        var venue = locationData.response.venues[0];
+        marker.venueId = venue.id;
+        return true;
+    })
+    .fail( function(jqXHR, textStatus, errorThrown){
+    	// show pleasant error
+        // console.error(errorThrown);
 	});
 
 }
@@ -138,27 +136,27 @@ function getVenueDetails(marker, infowindow) {
 	    	v: "20130815",
 	    	ll: marker.latitude + "," + marker.longitude,
 	    	query: marker.title
-	    },
-	    success:function(locationData) {
-	    	// add location details to info window
-	        var venue = locationData.response.venues[0];
-	        infoWindowContent += '<b>' + venue.name + '</b>';
-	        infoWindowContent += '<p>' + venue.location.formattedAddress[0] + '<br>';
-	        infoWindowContent += venue.location.formattedAddress[1] + '<br>';
-	        infoWindowContent += venue.location.formattedAddress[2] + '</p>';
-	        infoWindowContent += '<a href="' + venue.url + '" target="_blank">' + venue.url + '</a>';
-
-	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
-	        return locationData;
-	    },
-	    error: function(jqXHR, textStatus, errorThrown){
-	    	// show pleasant error
-	        infoWindowContent += '<b>' + marker.title + '</b>';
-	        infoWindowContent += '<p>Sorry there was an error loading additional information.</p>';
-	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
-    		return infoWindowContent;
 	    }
-	});
+	})
+    .done( function(locationData) {
+    	// add location details to info window
+        var venue = locationData.response.venues[0];
+        infoWindowContent += '<b>' + venue.name + '</b>';
+        infoWindowContent += '<p>' + venue.location.formattedAddress[0] + '<br>';
+        infoWindowContent += venue.location.formattedAddress[1] + '<br>';
+        infoWindowContent += venue.location.formattedAddress[2] + '</p>';
+        infoWindowContent += '<a href="' + venue.url + '" target="_blank">' + venue.url + '</a>';
+
+        infowindow.setContent('<div>' + infoWindowContent + '</div>');
+        return locationData;
+    })
+    .fail( function(jqXHR, textStatus, errorThrown) {
+    	// show pleasant error
+        infoWindowContent += '<b>' + marker.title + '</b>';
+        infoWindowContent += '<p>Sorry there was an error loading additional information.</p>';
+        infowindow.setContent('<div>' + infoWindowContent + '</div>');
+		return infoWindowContent;
+    });
 }
 
 /**
@@ -173,26 +171,25 @@ function getVenuePhoto(marker, infowindow) {
 	    	client_id: foursquare_client_id,
 	    	client_secret: foursquare_client_secret,
 	    	v: "20130815",
-	    },
-	    success:function(photoDetails) {
-	    	// get photo and add to infowindow
-	    	if (photoDetails.response.photos) {
-	    		var photo = photoDetails.response.photos.items[0];
-	    		var photo_src = photo.prefix + 'width300' + photo.suffix;
-	    		infoWindowContent += '<br><br><img src="' + photo_src + '"><br><br>';
-	    		infowindow.setContent('<div>' + infoWindowContent + '</div>');
-	    		return photoDetails;
-	    	}
-
-		},
-		error: function(jqXHR, textStatus, errorThrown){
-			// show pleasant error
-	        infoWindowContent += '<b>' + marker.title + '</b>';
-	        infoWindowContent += '<p>No image could be found at this time.</p>';
-	        infowindow.setContent('<div>' + infoWindowContent + '</div>');
-    		return infoWindowContent;
-		}
-	});
+	    }
+	})
+	.done( function(photoDetails) {
+    	// get photo and add to infowindow
+    	if (photoDetails.response.photos) {
+    		var photo = photoDetails.response.photos.items[0];
+    		var photo_src = photo.prefix + 'width300' + photo.suffix;
+    		infoWindowContent += '<br><br><img src="' + photo_src + '"><br><br>';
+    		infowindow.setContent('<div>' + infoWindowContent + '</div>');
+    		return photoDetails;
+    	}
+	})
+	.fail (function(jqXHR, textStatus, errorThrown) {
+		// show pleasant error
+        infoWindowContent += '<b>' + marker.title + '</b>';
+        infoWindowContent += '<p>No image could be found at this time.</p>';
+        infowindow.setContent('<div>' + infoWindowContent + '</div>');
+		return infoWindowContent;
+    });
 }
 
 /**
