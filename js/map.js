@@ -69,26 +69,32 @@ function getVenueFoursquareId(markers) {
 
 	markers.forEach( function(marker) {
 
-	// Query Foursquare API for location details
-	$.ajax({
-	    url:'https://api.foursquare.com/v2/venues/search',
-	    data: {
-	    	client_id: foursquare_client_id,
-	    	client_secret: foursquare_client_secret,
-	    	v: '20130815',
-	    	ll: marker.latitude + "," + marker.longitude,
-	    	query: marker.title
-		}
-	})
-    .done( function(locationData) {
-    	// add location details to info window
-        var venue = locationData.response.venues[0];
-        marker.venueId = venue.id;
-        return true;
-    })
-    .fail( function(jqXHR, textStatus, errorThrown){
-    	// show pleasant error
-        // console.error(errorThrown);
+		// Query Foursquare API for location details
+		$.ajax({
+		    url:'https://api.foursquare.com/v2/venues/search',
+		    data: {
+		    	client_id: foursquare_client_id,
+		    	client_secret: foursquare_client_secret,
+		    	v: '20130815',
+		    	ll: marker.latitude + "," + marker.longitude,
+		    	query: marker.title
+			}
+		})
+	    .done( function(locationData) {
+	    	// check for venue id from Foursquare API
+	    	var venue = locationData.response.venues[0];
+	    	if (venue !== undefined) {
+	    		marker.venueId = venue.id;
+	    	}
+	    	else {
+	    		marker.venueId = 'No venue id.';
+	    	}
+	    })
+	    .fail( function(jqXHR, textStatus, errorThrown) {
+	    	// show pleasant error
+	        // console.error(errorThrown);
+		});
+
 	});
 
 }
