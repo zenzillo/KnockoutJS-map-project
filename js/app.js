@@ -21,7 +21,7 @@ var Location = function(data) {
 	this.position = ko.observable(data.location);
 	this.latitude = ko.observable(data.location.lat);
 	this.longitude = ko.observable(data.location.lon);
-}
+};
 
 // Foursquare API keys
 var foursquare_client_id = "PJL50SVLNLN5UUXVEFUE1DGWEZIORWO0OZTVZAONZRSRWEJI";
@@ -60,7 +60,7 @@ var viewModel = function() {
 				populateInfoWindow(markers[i], singleInfoWindow);
 			}
 		});
-	}
+	};
 
 	// filter locations by search input
 	this.filterLocations = ko.computed(function() {
@@ -101,9 +101,9 @@ var viewModel = function() {
 		else {
 			this.showSidebar(true);
 		}
-	}
+	};
 
-}
+};
 
 ko.applyBindings(new viewModel());
 
