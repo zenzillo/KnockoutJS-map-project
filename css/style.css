@@ -63,3 +63,7 @@
       .navbar {
       	border-radius: 0px;
       }
+
+      #error {
+      	color: #f00;
+      }

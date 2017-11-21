@@ -92,7 +92,7 @@ function getVenueFoursquareId(markers) {
 	    })
 	    .fail( function(jqXHR, textStatus, errorThrown) {
 	    	// show pleasant error
-	        // console.error(errorThrown);
+	        $('#error').html('Sorry there was a problem accessing Foursquare. Please try again later.');
 		});
 
 	});
